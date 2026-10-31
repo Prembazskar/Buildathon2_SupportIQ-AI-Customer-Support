@@ -1,0 +1,11 @@
+autogen-agentchat
+autogen-ext[openai]
+streamlit
+python-dotenv
+pandas
+langchain
+langchain-community
+langchain-openai
+langchain-text-splitters
+faiss-cpu
+tiktoken

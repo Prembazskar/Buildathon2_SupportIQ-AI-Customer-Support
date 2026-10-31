@@ -1,0 +1,97 @@
+
+name: supportiq-ai
+
+services:
+
+  customer-portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: supportiq-ai:latest
+    container_name: supportiq-customer
+    restart: unless-stopped
+
+    command:
+      - python
+      - -m
+      - streamlit
+      - run
+      - app.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
+      - --server.headless=true
+
+    env_file:
+      - .env
+
+    ports:
+      - "127.0.0.1:8511:8501"
+
+    volumes:
+      - ./logs:/app/logs
+      - ./data/faiss_index:/app/data/faiss_index
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.supportiq-customer.rule=Host(`supportiq.pbazskar.tech`)"
+      - "traefik.http.routers.supportiq-customer.entrypoints=websecure"
+      - "traefik.http.routers.supportiq-customer.tls=true"
+      - "traefik.http.routers.supportiq-customer.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.supportiq-customer.service=supportiq-customer-svc"
+      - "traefik.http.services.supportiq-customer-svc.loadbalancer.server.port=8501"
+      - "traefik.docker.network=supportiq-ai_supportiq-network"
+
+    networks:
+      - supportiq-network
+
+
+  admin-dashboard:
+    image: supportiq-ai:latest
+    container_name: supportiq-admin
+    restart: unless-stopped
+
+    command:
+      - python
+      - -m
+      - streamlit
+      - run
+      - dashboard/admin_dashboard.py
+      - --server.address=0.0.0.0
+      - --server.port=8502
+      - --server.headless=true
+
+    env_file:
+      - .env
+
+    ports:
+      - "127.0.0.1:8512:8502"
+
+    volumes:
+      - ./logs:/app/logs
+      - ./data/faiss_index:/app/data/faiss_index
+
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.supportiq-admin.rule=Host(`supportiq-admin.pbazskar.tech`)"
+      - "traefik.http.routers.supportiq-admin.entrypoints=websecure"
+      - "traefik.http.routers.supportiq-admin.tls=true"
+      - "traefik.http.routers.supportiq-admin.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.supportiq-admin.service=supportiq-admin-svc"
+      - "traefik.http.routers.supportiq-admin.middlewares=supportiq-admin-auth"
+      - "traefik.http.middlewares.supportiq-admin-auth.basicauth.usersfile=/run/supportiq-auth/users.htpasswd"
+      - "traefik.http.services.supportiq-admin-svc.loadbalancer.server.port=8502"
+      - "traefik.docker.network=supportiq-ai_supportiq-network"
+
+
+    depends_on:
+      - customer-portal
+
+    networks:
+      - supportiq-network
+
+
+networks:
+  supportiq-network:
+    driver: bridge
