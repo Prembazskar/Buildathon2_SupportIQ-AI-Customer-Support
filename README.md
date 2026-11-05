@@ -9,6 +9,7 @@ It combines AutoGen multi-agent orchestration, FAISS-based Retrieval-Augmented G
 
 - Customer Portal: https://supportiq.pbazskar.tech
 - Admin Dashboard: https://supportiq-admin.pbazskar.tech (authentication required)
+- Skool: https://www.skool.com/social-eagle-ai-6384/se-ai-b12-2week5buildathon-project-supportiq-ai?p=9033deee
 
 ## Problem Statement
 
