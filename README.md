@@ -1,119 +1,129 @@
+# 🚀 SupportIQ AI — Intelligent Multi-Agent Customer Support
 
-# SupportIQ AI — Intelligent Multi-Agent Customer Support
+SupportIQ AI is an AI-powered customer support automation platform developed for the Buildathon using **Microsoft AutoGen, FAISS RAG, Streamlit, and Docker**.
 
-SupportIQ AI is an AI-powered customer support automation platform built for the Buildathon.
+It automates customer query classification, policy-based responses, conversation memory, ticket creation, and human escalation.
 
-It combines AutoGen multi-agent orchestration, FAISS-based Retrieval-Augmented Generation (RAG), human-in-the-loop escalation, and an administrative dashboard.
+## 🌐 Live Application
 
-## Live Application
+- **Customer Portal:** https://supportiq.pbazskar.tech
+- **Admin Dashboard:** https://supportiq-admin.pbazskar.tech (authentication required)
+- **Skool:** https://www.skool.com/social-eagle-ai-6384/se-ai-b12-2week5buildathon-project-supportiq-ai?p=9033deee
 
-- Customer Portal: https://supportiq.pbazskar.tech
-- Admin Dashboard: https://supportiq-admin.pbazskar.tech (authentication required)
-- Skool: https://www.skool.com/social-eagle-ai-6384/se-ai-b12-2week5buildathon-project-supportiq-ai?p=9033deee
+## 🎯 Key Features
 
-## Problem Statement
+- **Multi-Agent Automation:** Four specialized AutoGen agents handle customer support.
+- **Conversation Memory:** Remembers previous messages within the active session and understands follow-up questions.
+- **FAISS RAG:** Retrieves relevant information from company policy documents.
+- **Knowledge Validation:** Checks policy evidence and escalates when information is insufficient.
+- **Intelligent Responses:** Generates policy-grounded answers without inventing unsupported details.
+- **Ticket Management:** Automatically creates unique ticket IDs and logs support interactions.
+- **Human Escalation:** Supports agent assignment, investigation, resolution, and audit history.
+- **Admin Dashboard:** Displays ticket analytics, escalation queues, status tracking, and CSV export.
+- **Cloud Deployment:** Dockerized applications hosted on Ubuntu VPS with Traefik and HTTPS.
 
-Traditional customer support workflows can suffer from slow response times, repetitive questions, inconsistent answers, and inefficient escalation.
+## 🤖 Multi-Agent Architecture
 
-SupportIQ AI addresses these challenges by automating customer query classification, policy retrieval, response generation, ticket logging, and human escalation.
-
-## Key Features
-
-- Multi-agent customer support automation
-- AI-based query classification
-- Urgency and sentiment detection
-- FAISS vector search over support knowledge documents
-- Policy-grounded response generation
-- Automatic ticket creation and CSV logging
-- Human-in-the-loop escalation
-- Escalation assignment and resolution tracking
-- Admin dashboard with support analytics
-- HTTPS deployment and password-protected administration
-
-## Multi-Agent Architecture
-
-SupportIQ AI uses four specialized agents:
-
-### 1. Query Agent
-Analyzes customer requests and identifies their category, urgency, and sentiment.
-
-### 2. Knowledge Agent
-Retrieves relevant support policy information from the FAISS vector database.
-
-### 3. Resolution Agent
-Generates responses using retrieved knowledge and determines whether human escalation is required.
-
-### 4. Log Agent
-Records ticket details, AI responses, classification results, and resolution status.
-
-## Workflow
-
-Customer Query
-    |
-    v
-Query Agent
-    |
-    v
-Knowledge Agent (FAISS RAG)
-    |
-    v
-Resolution Agent
-    |
-    +----> AI Resolution
-    |
-    +----> Human Escalation
-                |
-                v
-         Admin Dashboard
-                |
-                v
-       Assign / In Progress / Resolve
-
-The Log Agent records support ticket information throughout the workflow.
-
-## Knowledge Base
-
-The application uses Markdown-based support documents covering:
-
-- Shipping policies
-- Refund policies
-- Account and login support
-- Product frequently asked questions
-
-FAISS provides semantic retrieval of relevant policy content.
-
-## Human Escalation
-
-When a customer query requires human review, SupportIQ AI creates an escalated ticket.
-
-Authorized administrators can:
-
-1. Review escalated tickets.
-2. Assign a support agent.
-3. Mark the ticket as in progress.
-4. Resolve the case.
-5. Review the human action history.
-
-## Technology Stack
-
-| Layer | Technology |
+| Agent | Responsibility |
 |---|---|
-| Programming | Python |
-| Multi-Agent Framework | Microsoft AutoGen |
-| LLM | OpenAI |
-| RAG | LangChain and FAISS |
-| Customer Portal | Streamlit |
-| Admin Dashboard | Streamlit |
+| Query Agent | Classifies category, urgency, and sentiment |
+| Knowledge Agent | Retrieves FAISS policy evidence and checks sufficiency |
+| Resolution Agent | Generates customer-friendly, policy-grounded responses |
+| Log Agent | Creates tickets and records support interactions |
+
+### Workflow
+
+```text
+Customer Query / Follow-up
+          |
+          v
+Conversation Memory
+          |
+          v
+Context-Aware Query Rewriting
+          |
+          v
+Query Agent
+          |
+          v
+Knowledge Agent (FAISS RAG)
+          |
+          v
+Resolution Agent
+          |
+          v
+Log Agent (Ticket Creation)
+          |
+          +----------------------+
+          |                      |
+          v                      v
+     AI Response          Human Escalation
+                                 |
+                                 v
+                          Admin Dashboard
+                                 |
+                                 v
+                   Assign → Investigate → Resolve
+                                 |
+                                 v
+                           Audit History
+```
+
+## 📚 Knowledge Base
+
+FAISS retrieves relevant information from Markdown documents covering:
+
+- Shipping and delivery
+- Refunds and returns
+- Account and login support
+- Product FAQs
+
+The Knowledge Agent checks whether retrieved evidence is sufficient. Unsupported questions are escalated for human review.
+
+## 🔄 Improvements Implemented
+
+### 1. Conversation Memory
+- Added Streamlit session-based conversation history.
+- Implemented context-aware follow-up handling.
+- Added message counter and Clear Conversation option.
+
+### 2. Knowledge Agent Improvements
+- Validated FAISS retrieval and policy evidence.
+- Enforced human escalation for insufficient evidence.
+- Preserved high-urgency escalation.
+- Prevented unsupported product and billing claims.
+
+### 3. Human Escalation Validation
+- Verified ticket assignment and investigation workflow.
+- Confirmed resolution notes and audit history.
+- Validated dashboard KPI updates.
+
+### 4. Deployment Improvements
+- Deployed updated Customer Portal using `supportiq-ai:memory-v3`.
+- Maintained separate Customer Portal and Admin Dashboard containers.
+- Verified shared persistent ticket logs and FAISS storage.
+- Confirmed running containers and checked recent application logs.
+
+## 🛠️ Technology Stack
+
+| Component | Technology |
+|---|---|
+| Programming | Python 3.12 |
+| AI Agents | Microsoft AutoGen |
+| LLM & Embeddings | OpenAI |
+| RAG | LangChain + FAISS |
+| Frontend | Streamlit |
 | Ticket Storage | CSV |
 | Containerization | Docker Compose |
 | Reverse Proxy | Traefik |
 | HTTPS | Let's Encrypt |
-| Hosting | Ubuntu VPS |
+| Hosting | Hostinger Ubuntu VPS |
+| Version Control | GitHub |
 
-## Project Structure
+## 📁 Project Structure
 
 ```text
-.
+SupportIQ-AI/
 ├── agents/
 ├── dashboard/
 ├── escalation/
@@ -124,105 +134,79 @@ Authorized administrators can:
 ├── team.py
 ├── Dockerfile
 ├── compose.yaml
+├── compose.memory.yaml
 ├── requirements.txt
 └── README.md
 ```
 
-Runtime logs, authentication credentials, API keys, and generated FAISS indexes are excluded from version control.
+Runtime logs, FAISS indexes, API keys, and authentication files are excluded from Git.
 
-## Local Setup
-
-Requirements:
-- Python 3.12
-- OpenAI API key
-
-Install dependencies:
+## 💻 Local Setup
 
 ```bash
+git clone https://github.com/Prembazskar/Buildathon2_SupportIQ-AI-Customer-Support.git
+cd Buildathon2_SupportIQ-AI-Customer-Support
+
+python -m venv venv
+source venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
-Configure the required API credentials in a local `.env` file.
-
-Build the FAISS index using the ingestion script:
+Configure `OPENAI_API_KEY` in `.env`, then build the FAISS index:
 
 ```bash
 python -m vector_rag.ingest
 ```
 
-Start the Customer Portal:
+Start the applications in separate terminals:
 
 ```bash
 streamlit run app.py
-```
-
-Start the Admin Dashboard:
-
-```bash
 streamlit run dashboard/admin_dashboard.py
 ```
 
-The local Admin Dashboard should be used only in a trusted environment unless separate authentication is configured.
+The Admin Dashboard requires separate access protection when exposed beyond a trusted local environment.
 
-## Docker Deployment
+## 🧪 Testing & Validation
 
-The production deployment uses two Streamlit containers:
+Successfully tested:
 
-- Customer Portal
-- Admin Dashboard
+- Customer complaint classification and AI responses
+- FAISS policy retrieval and evidence validation
+- Conversation memory and follow-up handling
+- Automatic ticket creation and logging
+- Human escalation for insufficient evidence
+- Agent assignment, investigation, and resolution
+- Escalation audit history and dashboard metrics
+- Docker container status and recent application logs
 
-Both containers share the support ticket logs and FAISS index through mounted directories.
+**Example:** A duplicate-payment complaint was escalated and processed through:
 
-Traefik provides HTTPS routing and Basic Authentication for the Admin Dashboard.
+`Pending Review → Assigned → In Progress → Resolved`
 
-Authentication files and environment secrets are managed outside Git.
+All three human actions were verified in the audit log. No real refund was performed.
 
-## Testing
+## 🔐 Security & Limitations
 
-Run the automated test suite:
+- HTTPS enabled through Traefik.
+- Admin Dashboard protected by Basic Authentication.
+- API keys and runtime data excluded from Git.
+- Application ports restricted to localhost on the VPS.
+- Conversation memory is session-based.
+- CSV ticket storage does not provide transactional concurrency control.
+- No live payment, inventory, or order-tracking integrations.
 
-```bash
-python -m unittest discover -s tests -t . -p "test_*.py" -v
-```
-
-The project has passed 10 automated tests covering ticket logging and escalation workflows.
-
-## Demonstration Scenario
-
-Customer query:
-
-"Someone accessed my account without permission! I am worried about my personal information."
-
-SupportIQ AI:
-
-1. Classifies the query as Account.
-2. Detects high urgency and negative sentiment.
-3. Retrieves account security guidance.
-4. Generates an appropriate response.
-5. Escalates the security concern for human review.
-6. Creates a support ticket.
-7. Allows an administrator to assign and resolve the case.
-
-## Security
-
-- API credentials excluded from Git
-- Authentication files excluded from Git
-- HTTPS enabled through Traefik
-- Admin Dashboard protected using Basic Authentication
-- Application ports bound to localhost on the VPS
-- Human review for sensitive or high-risk cases
-
-## Future Enhancements
+## 🚀 Future Enhancements
 
 - Role-based access control
-- Database-backed ticket management
-- Customer email notifications
-- SLA tracking and automated reminders
-- Advanced support analytics
-- Integration with enterprise CRM and ticketing platforms
+- PostgreSQL ticket database
+- Persistent customer conversation history
+- Email notifications and SLA monitoring
+- CRM and enterprise helpdesk integrations
 
-## Buildathon Project
+## 🏆 Buildathon Outcome
 
 **SupportIQ AI — From Customer Query to Intelligent Resolution**
 
-An end-to-end multi-agent customer support system combining AI automation, knowledge retrieval, human oversight, and cloud deployment.
+Successfully built and deployed an end-to-end multi-agent customer support platform combining **Agentic AI, FAISS RAG, conversation memory, automated ticket management, human-in-the-loop escalation, and cloud deployment**.
