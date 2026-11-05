@@ -1,0 +1,3 @@
+services:
+  customer-portal:
+    image: supportiq-ai:memory-v3

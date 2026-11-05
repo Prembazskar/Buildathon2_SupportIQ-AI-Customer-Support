@@ -121,6 +121,13 @@ async def analyze_knowledge(
             )
         )
 
+        # Enforce escalation when policy evidence is insufficient.
+        if analysis.get("sufficient_evidence") is not True:
+            analysis["escalation_required"] = True
+            analysis["recommended_action"] = (
+                "Escalate to human support for review."
+            )
+
         # High-urgency cases require human review.
         if urgency.lower() == "high":
             analysis["escalation_required"] = True
@@ -132,7 +139,6 @@ async def analyze_knowledge(
 
     finally:
         await model_client.close()
-
 
 
 async def main():
